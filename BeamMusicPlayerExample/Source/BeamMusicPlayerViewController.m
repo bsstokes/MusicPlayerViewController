@@ -36,7 +36,6 @@
 #import "BeamMusicPlayerViewController.h"
 #import "UIImageView+Reflection.h"
 #import "NSDateFormatter+Duration.h"
-#import <MediaPlayer/MediaPlayer.h>
 #import "AutoScrollLabel.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -84,6 +83,9 @@
 @property (nonatomic) BOOL lastDirectionChangePositive; // Whether the last direction change was positive.
 
 @property (nonatomic,weak) IBOutlet UINavigationItem* navigationItem;
+
+- (void)startPlaybackTickTimer;
+- (void)stopPlaybackTickTimer;
 
 @end
 
@@ -267,7 +269,7 @@
     if ( !self.playing ){
         self->playing = YES;
         
-        self.playbackTickTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(playbackTick:) userInfo:nil repeats:YES];
+        [self startPlaybackTickTimer];
         
         if ( [self.delegate respondsToSelector:@selector(musicPlayerDidStartPlaying:)] ){
             [self.delegate musicPlayerDidStartPlaying:self];
@@ -279,8 +281,7 @@
 -(void)pause {
     if ( self.playing ){
         self->playing = NO;
-        [self.playbackTickTimer invalidate];
-        self.playbackTickTimer = nil;
+        [self stopPlaybackTickTimer];
         
         if ( [self.delegate respondsToSelector:@selector(musicPlayerDidStopPlaying:)] ){
             [self.delegate musicPlayerDidStopPlaying:self];
@@ -336,14 +337,17 @@
         shouldChange = [self.delegate musicPlayer:self shouldChangeTrack:newTrack];
     }
     
-    if ( newTrack > numberOfTracks-1 ){
-        shouldChange = NO;
-        // If we can't next, stop the playback.
-        self->currentPlaybackPosition = self.currentTrackLength;
-        [self pause];
-    }
-    
     if ( shouldChange ){
+
+        self.numberOfTracks = [self.dataSource numberOfTracksInPlayer:self];
+
+        // Can we change to this track?
+        BOOL canChange = (newTrack < numberOfTracks);
+        if (!canChange) {
+            // Reset if we can't change
+            newTrack = 0;
+        }
+
         [self pause];
         
         // Update state to match new track
@@ -351,7 +355,6 @@
         self.currentTrack = newTrack;
         
         self.currentTrackLength = [self.dataSource musicPlayer:self lengthForTrack:self.currentTrack];
-        self.numberOfTracks = [self.dataSource numberOfTracksInPlayer:self];
         
         // Slider
         self.progressSlider.maximumValue = self.currentTrackLength;
@@ -365,7 +368,11 @@
         [self updateSeekUI];
         [self updateTrackDisplay];
         [self adjustDirectionalButtonStates];
-        [self play];
+
+        // Only play again if we can/did change
+        if (canChange) {
+            [self play];
+        }
     }
 }
 
@@ -387,13 +394,22 @@
 -(void)playbackTick:(id)unused {
     // Only tick forward if not scrobbling.
     if ( !self.scrobbling ){
-        if ( self->currentPlaybackPosition+1.0 > self.currentTrackLength ){
+
+        [self syncPlaybackPosition];
+
+        if ( self.currentPlaybackPosition >= self.currentTrackLength ){
             [self currentTrackFinished];
         } else {
-            self->currentPlaybackPosition += 1.0f;
             [self updateSeekUI];
         }
     }
+}
+
+- (void)syncPlaybackPosition
+{
+    // TODO: Figure this one out.
+    //self->currentPlaybackPosition = [dataSource musicPlayer:self currentPositionForTrack:self.currentTrack];
+    self->currentPlaybackPosition += 1.0f;
 }
 
 /*
@@ -434,6 +450,33 @@
     }
     if ( imageName )
         [self.repeatButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+}
+
+@synthesize timerInterval = _timerInterval;
+
+- (void)setTimerInterval:(float)timerInterval
+{
+    BOOL playbackTickTimerExists = !!self.playbackTickTimer;
+    if (playbackTickTimerExists) {
+        [self stopPlaybackTickTimer];
+    }
+
+    _timerInterval = timerInterval;
+
+    if (playbackTickTimerExists) {
+        [self startPlaybackTickTimer];
+    }
+}
+
+- (void)startPlaybackTickTimer
+{
+    self.playbackTickTimer = [NSTimer scheduledTimerWithTimeInterval:self.timerInterval target:self selector:@selector(playbackTick:) userInfo:nil repeats:YES];
+}
+
+- (void)stopPlaybackTickTimer
+{
+    [self.playbackTickTimer invalidate];
+    self.playbackTickTimer = nil;
 }
 
 #pragma mark Repeat mode
