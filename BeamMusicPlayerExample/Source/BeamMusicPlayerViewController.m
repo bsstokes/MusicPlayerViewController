@@ -407,9 +407,7 @@
 
 - (void)syncPlaybackPosition
 {
-    // TODO: Figure this one out.
-    //self->currentPlaybackPosition = [dataSource musicPlayer:self currentPositionForTrack:self.currentTrack];
-    self->currentPlaybackPosition += 1.0f;
+    self->currentPlaybackPosition = [dataSource musicPlayer:self currentPositionForTrack:self.currentTrack];
 }
 
 /*
@@ -620,6 +618,12 @@
     self.scrobbling = NO;
     [self setScrobbleUI:NO];
     [self updateTrackDisplay];
+
+    if (slider == self.progressSlider) {
+        if ( [self.delegate respondsToSelector:@selector(musicPlayer:didSeekToPosition:)]) {
+            [self.delegate musicPlayer:self didSeekToPosition:self->currentPlaybackPosition];
+        }
+    }
 }
 
 /*
@@ -640,13 +644,7 @@
  */
 -(IBAction)sliderValueChanged:(id)slider {
     self->currentPlaybackPosition = self.progressSlider.value;
-    
-    if ( [self.delegate respondsToSelector:@selector(musicPlayer:didSeekToPosition:)]) {
-        [self.delegate musicPlayer:self didSeekToPosition:self->currentPlaybackPosition];
-    }
-    
     [self updateSeekUI];
-    
 }
 
 /*

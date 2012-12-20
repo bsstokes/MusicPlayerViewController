@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+CGImageRef CreateGradientImage(int pixelsWide, int pixelsHigh);
+
 @interface UIImageView (Reflection)
 - (UIImage *)reflectedImageWithHeight:(NSUInteger)height;
 
