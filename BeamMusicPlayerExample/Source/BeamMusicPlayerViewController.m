@@ -620,8 +620,8 @@
     [self updateTrackDisplay];
 
     if (slider == self.progressSlider) {
-        if ( [self.delegate respondsToSelector:@selector(musicPlayer:didSeekToPosition:)]) {
-            [self.delegate musicPlayer:self didSeekToPosition:self->currentPlaybackPosition];
+        if ( [self.delegate respondsToSelector:@selector(musicPlayer:didSeekToPosition:scrubbingEnded:)]) {
+            [self.delegate musicPlayer:self didSeekToPosition:self->currentPlaybackPosition scrubbingEnded:YES];
         }
     }
 }
@@ -644,6 +644,11 @@
  */
 -(IBAction)sliderValueChanged:(id)slider {
     self->currentPlaybackPosition = self.progressSlider.value;
+
+    if ( [self.delegate respondsToSelector:@selector(musicPlayer:didSeekToPosition:scrubbingEnded:)]) {
+        [self.delegate musicPlayer:self didSeekToPosition:self->currentPlaybackPosition scrubbingEnded:NO];
+    }
+
     [self updateSeekUI];
 }
 

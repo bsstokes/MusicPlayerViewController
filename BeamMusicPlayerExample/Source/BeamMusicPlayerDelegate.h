@@ -58,8 +58,9 @@
  * Called after the player seeked or scrubbed to a new position. This is mostly the result of a user interaction.
  * @param player the BeamMusicPlayerViewController sending the message
  * @param position new position in seconds
+ * @param scrubbingEnded YES if the scrubbing ended, NO if still scrubbing
  */
--(void)musicPlayer:(BeamMusicPlayerViewController*)player didSeekToPosition:(CGFloat)position;
+-(void)musicPlayer:(BeamMusicPlayerViewController*)player didSeekToPosition:(CGFloat)position scrubbingEnded:(BOOL)scrubbingEnded;
 
 /**
  * Called before the player actually skips to the next song, but after the user initiated that action.
