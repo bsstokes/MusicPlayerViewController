@@ -84,4 +84,7 @@ typedef void(^BeamMusicPlayerReceivingBlock)(UIImage* image, NSError** error);
  */
 -(void)musicPlayer:(BeamMusicPlayerViewController*)player artworkForTrack:(NSUInteger)trackNumber receivingBlock:(BeamMusicPlayerReceivingBlock)receivingBlock;
 
+-(BOOL)musicPlayer:(BeamMusicPlayerViewController*)player shouldShowUserToolbar:(UIToolbar*)userToolbar;
+-(void)musicPlayer:(BeamMusicPlayerViewController*)player configureUserToolbar:(UIToolbar*)userToolbar;
+
 @end

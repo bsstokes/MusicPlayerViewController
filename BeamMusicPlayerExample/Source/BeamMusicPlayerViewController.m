@@ -49,6 +49,7 @@
 @property (nonatomic,weak) IBOutlet AutoScrollLabel* artistNameLabel; // Artist Name Label
 
 @property (nonatomic,weak) IBOutlet UIToolbar* controlsToolbar; // Encapsulates the Play, Forward, Rewind buttons
+@property (nonatomic,weak) IBOutlet UIToolbar* userToolbar; // Encapsulates speed controls
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *actionButton; // retain, since controller keeps a reference while it might be detached from view hierarchy
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton; // retain, since controller keeps a reference while it might be detached from view hierarchy
@@ -155,6 +156,8 @@
     toolbarRect.size.height = 48;
     self.controlsToolbar.frame = toolbarRect;
 
+    [self configureUserToolbar];
+
     // Set UI to non-scrobble
     [self setScrobbleUI:NO];
     
@@ -204,6 +207,25 @@
         [self.delegate respondsToSelector:@selector(musicPlayerBackRequested:)]
         ? self.backButton
         : nil;
+}
+
+- (void)configureUserToolbar
+{
+    BOOL hideUserToolbar = YES;
+
+    if (self.dataSource) {
+        if ([self.dataSource respondsToSelector:@selector(musicPlayer:shouldShowUserToolbar:)]
+            && [self.dataSource musicPlayer:self shouldShowUserToolbar:self.userToolbar]) {
+
+            hideUserToolbar = NO;
+
+            if ([self.dataSource respondsToSelector:@selector(musicPlayer:configureUserToolbar:)]) {
+                [self.dataSource musicPlayer:self configureUserToolbar:self.userToolbar];
+            }
+        }
+    }
+
+    self.userToolbar.hidden = hideUserToolbar;
 }
 
 
