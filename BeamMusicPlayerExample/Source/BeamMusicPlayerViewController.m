@@ -175,7 +175,9 @@
 
     self.trackTitleLabel.textColor = [UIColor whiteColor];
     [self.trackTitleLabel setFont:[UIFont boldSystemFontOfSize:12]];
-    
+
+    // Hack to force updating navigationItem.rightBarButtonItem
+    self.delegate = self.delegate;
 }
 
 - (void)viewDidUnload
