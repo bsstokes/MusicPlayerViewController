@@ -95,6 +95,7 @@
  * @param volume the Volume of the playback 
  */
 -(void)playTrack:(NSUInteger)track atPosition:(CGFloat)position volume:(CGFloat)volume;
+-(void)playTrack:(NSUInteger)track atPosition:(CGFloat)position volume:(CGFloat)volume withAnimation:(BOOL)animation;
 
 
 /**

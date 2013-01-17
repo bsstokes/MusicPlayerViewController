@@ -237,7 +237,11 @@
  * Updates the UI to match the current track by requesting the information from the datasource.
  */
 -(void)updateUIForCurrentTrack {
-    
+    [self updateUIForCurrentTrackWithAnimation:YES];
+}
+
+-(void)updateUIForCurrentTrackWithAnimation:(BOOL)animation {
+
     self.artistNameLabel.text = [self.dataSource musicPlayer:self artistForTrack:self.currentTrack];
     self.trackTitleLabel.text = [self.dataSource musicPlayer:self titleForTrack:self.currentTrack];
     self.albumTitleLabel.text = [self.dataSource musicPlayer:self albumForTrack:self.currentTrack];
@@ -253,16 +257,18 @@
         self.albumArtReflection.image = [self.albumArtImageView reflectedImageWithHeight:self.albumArtReflection.frame.size.height];
         self.imageIsPlaceholder = YES;
         
-        CATransition* transition = [CATransition animation];
-        transition.type = kCATransitionPush;
-        transition.subtype = self.lastDirectionChangePositive ? kCATransitionFromRight : kCATransitionFromLeft;
-        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [[self.albumArtImageView layer] addAnimation:transition forKey:@"SlideOutandInImagek"];
+        if (animation) {
+            CATransition* transition = [CATransition animation];
+            transition.type = kCATransitionPush;
+            transition.subtype = self.lastDirectionChangePositive ? kCATransitionFromRight : kCATransitionFromLeft;
+            [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            [[self.albumArtImageView layer] addAnimation:transition forKey:@"SlideOutandInImagek"];
 
-        [[self.albumArtReflection layer] addAnimation:transition forKey:@"SlideOutandInImagek"];
+            [[self.albumArtReflection layer] addAnimation:transition forKey:@"SlideOutandInImagek"];
+        }
 
 
-        // Request the image. 
+        // Request the image.
         [self.dataSource musicPlayer:self artworkForTrack:self.currentTrack receivingBlock:^(UIImage *image, NSError *__autoreleasing *error) {
             if ( track == self.currentTrack ){
             
@@ -346,8 +352,12 @@
 }
 
 -(void)playTrack:(NSUInteger)track atPosition:(CGFloat)position volume:(CGFloat)volume {
+    [self playTrack:track atPosition:position volume:volume withAnimation:YES];
+}
+
+-(void)playTrack:(NSUInteger)track atPosition:(CGFloat)position volume:(CGFloat)volume withAnimation:(BOOL)animation {
     self.volume = volume;
-    [self changeTrack:track];
+    [self changeTrack:track withAnimation:animation];
     self->currentPlaybackPosition = position;
     [self play];
 }
@@ -356,6 +366,11 @@
  * Changes the track to the new track given.
  */
 -(void)changeTrack:(NSUInteger)newTrack {
+    [self changeTrack:newTrack withAnimation:YES];
+}
+
+-(void)changeTrack:(NSUInteger)newTrack withAnimation:(BOOL)animation {
+
     BOOL shouldChange = YES;
     if ( [self.delegate respondsToSelector:@selector(musicPlayer:shouldChangeTrack:) ]){
         shouldChange = [self.delegate musicPlayer:self shouldChangeTrack:newTrack];
@@ -388,7 +403,7 @@
             [self.delegate musicPlayer:self didChangeTrack:newTrack];
         }
                 
-        [self updateUIForCurrentTrack];
+        [self updateUIForCurrentTrackWithAnimation:animation];
         [self updateSeekUI];
         [self updateTrackDisplay];
         [self adjustDirectionalButtonStates];
