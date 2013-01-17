@@ -153,7 +153,7 @@
 
     // The Original Toolbar is 48px high in the iPod/Music app
     CGRect toolbarRect = self.controlsToolbar.frame;
-    toolbarRect.size.height = 48;
+    toolbarRect.size.height = 56;
     self.controlsToolbar.frame = toolbarRect;
 
     [self configureUserToolbar];
