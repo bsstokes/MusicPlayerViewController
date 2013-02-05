@@ -359,7 +359,7 @@
 					<object class="IBUIImageView" id="627743492">
 						<reference key="NSNextResponder" ref="774585933"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{0, 74}, {320, 64}}</string>
+						<string key="NSFrame">{{0, 72}, {320, 64}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="180213717"/>
@@ -472,7 +472,7 @@
 					<object class="IBUIView" id="180213717">
 						<reference key="NSNextResponder" ref="774585933"/>
 						<int key="NSvFlags">266</int>
-						<string key="NSFrame">{{0, 260}, {320, 60}}</string>
+						<string key="NSFrame">{{0, 253}, {320, 60}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="703504242"/>
@@ -1145,6 +1145,12 @@
 						<reference key="parent" ref="546333562"/>
 					</object>
 					<object class="IBObjectRecord">
+						<int key="objectID">118</int>
+						<reference key="object" ref="180213717"/>
+						<reference key="parent" ref="774585933"/>
+						<string key="objectName">Speed Controls View</string>
+					</object>
+					<object class="IBObjectRecord">
 						<int key="objectID">108</int>
 						<reference key="object" ref="703504242"/>
 						<array class="NSMutableArray" key="children">
@@ -1156,8 +1162,8 @@
 						<string key="objectName">Controls View</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">109</int>
-						<reference key="object" ref="39835218"/>
+						<int key="objectID">111</int>
+						<reference key="object" ref="451841949"/>
 						<reference key="parent" ref="703504242"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -1166,15 +1172,9 @@
 						<reference key="parent" ref="703504242"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">111</int>
-						<reference key="object" ref="451841949"/>
+						<int key="objectID">109</int>
+						<reference key="object" ref="39835218"/>
 						<reference key="parent" ref="703504242"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">118</int>
-						<reference key="object" ref="180213717"/>
-						<reference key="parent" ref="774585933"/>
-						<string key="objectName">Speed Controls View</string>
 					</object>
 				</array>
 			</object>
