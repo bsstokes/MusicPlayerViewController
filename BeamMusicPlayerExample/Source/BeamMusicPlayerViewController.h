@@ -148,7 +148,7 @@
 /// The preferred size for cover art in pixels
 @property (nonatomic, readonly) CGSize preferredSizeForCoverArt; 
 
-
+-(IBAction)previousAction:(id)sender;
 -(IBAction)nextAction:(id)sender;
 -(IBAction)playAction:(id)sender;
 -(IBAction)sliderValueChanged:(id)slider;

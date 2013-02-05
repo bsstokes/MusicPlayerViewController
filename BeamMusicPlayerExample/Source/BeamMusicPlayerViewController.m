@@ -48,15 +48,14 @@
 @property (nonatomic,weak) IBOutlet AutoScrollLabel* albumTitleLabel; // Album Label
 @property (nonatomic,weak) IBOutlet AutoScrollLabel* artistNameLabel; // Artist Name Label
 
-@property (nonatomic,weak) IBOutlet UIToolbar* controlsToolbar; // Encapsulates the Play, Forward, Rewind buttons
 @property (nonatomic,weak) IBOutlet UIToolbar* userToolbar; // Encapsulates speed controls
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *actionButton; // retain, since controller keeps a reference while it might be detached from view hierarchy
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton; // retain, since controller keeps a reference while it might be detached from view hierarchy
 
-@property (nonatomic,weak) IBOutlet UIBarButtonItem* rewindButton; // Previous Track
-@property (nonatomic,weak) IBOutlet UIBarButtonItem* fastForwardButton; // Next Track
-@property (nonatomic,weak) IBOutlet UIBarButtonItem* playButton; // Play
+@property (nonatomic,weak) IBOutlet UIButton* rewindButton; // Previous Track
+@property (nonatomic,weak) IBOutlet UIButton* fastForwardButton; // Next Track
+@property (nonatomic,weak) IBOutlet UIButton* playButton; // Play
 
 @property (nonatomic,weak) IBOutlet UIImageView* albumArtImageView; // Album Art Image View
 @property (nonatomic,weak) IBOutlet UIImageView* albumArtReflection; // It's reflection
@@ -102,7 +101,6 @@
 @synthesize playButton;
 @synthesize volumeSlider;
 @synthesize progressSlider;
-@synthesize controlsToolbar;
 @synthesize albumArtImageView;
 @synthesize albumArtReflection;
 @synthesize delegate;
@@ -150,11 +148,6 @@
 
     [[UISlider appearance] setMinimumTrackImage:sliderBlueTrack forState:UIControlStateNormal];
     [[UISlider appearance] setMaximumTrackImage:slideWhiteTrack forState:UIControlStateNormal];
-
-    // The Original Toolbar is 48px high in the iPod/Music app
-    CGRect toolbarRect = self.controlsToolbar.frame;
-    toolbarRect.size.height = 56;
-    self.controlsToolbar.frame = toolbarRect;
 
     [self configureUserToolbar];
 
@@ -550,7 +543,7 @@
 
 #pragma mark - User Interface ACtions
 
--(IBAction)playAction:(UIBarButtonItem*)sender {
+-(IBAction)playAction:(id)sender {
     if ( self.playing ){
         [self pause];
     } else {
@@ -605,11 +598,17 @@
  * Adjusts the state of the play button to match the current state of the player
  */
 -(void)adjustPlayButtonState {
+
     if ( !self.playing ){
-        self.playButton.image = [UIImage imageNamed:@"play.png"];
+        [self updateButton:self.playButton withImageNamed:@"play.png"];
     } else {
-        self.playButton.image = [UIImage imageNamed:@"pause.png"];
+        [self updateButton:self.playButton withImageNamed:@"pause.png"];
     }
+}
+
+-(void)updateButton:(UIButton *)button withImageNamed:(NSString *)imageName
+{
+    [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 }
 
 -(void)setShouldHideNextTrackButtonAtBoundary:(BOOL)newShouldHideNextTrackButtonAtBoundary {
