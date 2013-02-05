@@ -85,23 +85,23 @@ typedef void(^BeamMusicPlayerReceivingBlock)(UIImage* image, NSError** error);
 -(void)musicPlayer:(BeamMusicPlayerViewController*)player artworkForTrack:(NSUInteger)trackNumber receivingBlock:(BeamMusicPlayerReceivingBlock)receivingBlock;
 
 /**
- * Specifies whether or not to show the user toolbar.
+ * Specifies whether or not to show the user view.
  *
  * @param player the BeamMusicPlayerViewController that is making this request.
- * @param userToolbar the user toolbar that may or may not be shown.
- * @return YES to show userToolbar, NO to hide it.
+ * @param userView the user view that may or may not be shown.
+ * @return YES to show userView, NO to hide it.
  */
--(BOOL)musicPlayer:(BeamMusicPlayerViewController*)player shouldShowUserToolbar:(UIToolbar*)userToolbar;
+-(BOOL)musicPlayer:(BeamMusicPlayerViewController*)player shouldShowUserView:(UIView*)userView;
 
 /**
- * Configures the user toolbar.
+ * Configures the user view.
  *
- * This is only called if [BeamMusicPlayerDataSource musicPlayer:shouldShowUserToolbar:] returns YES.
+ * This is only called if [BeamMusicPlayerDataSource musicPlayer:shouldShowUserView:] returns YES.
  *
  * @param player the BeamMusicPlayerViewController that is making this request.
- * @param userToolbar the user toolbar to be configured.
- * @see [BeamMusicPlayerDataSource musicPlayer:shouldShowUserToolbar:]
+ * @param userView the user view to be configured.
+ * @see [BeamMusicPlayerDataSource musicPlayer:shouldShowUserView:]
  */
--(void)musicPlayer:(BeamMusicPlayerViewController*)player configureUserToolbar:(UIToolbar*)userToolbar;
+-(void)musicPlayer:(BeamMusicPlayerViewController*)player configureUserView:(UIView*)userView;
 
 @end

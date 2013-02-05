@@ -48,7 +48,7 @@
 @property (nonatomic,weak) IBOutlet AutoScrollLabel* albumTitleLabel; // Album Label
 @property (nonatomic,weak) IBOutlet AutoScrollLabel* artistNameLabel; // Artist Name Label
 
-@property (nonatomic,weak) IBOutlet UIToolbar* userToolbar; // Encapsulates speed controls
+@property (nonatomic,weak) IBOutlet UIView* userView;
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *actionButton; // retain, since controller keeps a reference while it might be detached from view hierarchy
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton; // retain, since controller keeps a reference while it might be detached from view hierarchy
@@ -149,7 +149,7 @@
     [[UISlider appearance] setMinimumTrackImage:sliderBlueTrack forState:UIControlStateNormal];
     [[UISlider appearance] setMaximumTrackImage:slideWhiteTrack forState:UIControlStateNormal];
 
-    [self configureUserToolbar];
+    [self configureUserView];
 
     // Set UI to non-scrobble
     [self setScrobbleUI:NO];
@@ -204,23 +204,23 @@
         : nil;
 }
 
-- (void)configureUserToolbar
+- (void)configureUserView
 {
-    BOOL hideUserToolbar = YES;
+    BOOL hideUserView = YES;
 
     if (self.dataSource) {
-        if ([self.dataSource respondsToSelector:@selector(musicPlayer:shouldShowUserToolbar:)]
-            && [self.dataSource musicPlayer:self shouldShowUserToolbar:self.userToolbar]) {
+        if ([self.dataSource respondsToSelector:@selector(musicPlayer:shouldShowUserView:)]
+            && [self.dataSource musicPlayer:self shouldShowUserView:self.userView]) {
 
-            hideUserToolbar = NO;
+            hideUserView = NO;
 
-            if ([self.dataSource respondsToSelector:@selector(musicPlayer:configureUserToolbar:)]) {
-                [self.dataSource musicPlayer:self configureUserToolbar:self.userToolbar];
+            if ([self.dataSource respondsToSelector:@selector(musicPlayer:configureUserView:)]) {
+                [self.dataSource musicPlayer:self configureUserView:self.userView];
             }
         }
     }
 
-    self.userToolbar.hidden = hideUserToolbar;
+    self.userView.hidden = hideUserView;
 }
 
 
