@@ -150,6 +150,8 @@
     [[UISlider appearance] setMaximumTrackImage:slideWhiteTrack forState:UIControlStateNormal];
 
     [self configureUserView];
+    self.repeatButton.hidden = YES;
+    self.shuffleButton.hidden = YES;
 
     // Set UI to non-scrobble
     [self setScrobbleUI:NO];
