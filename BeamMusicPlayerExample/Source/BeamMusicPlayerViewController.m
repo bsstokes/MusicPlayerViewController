@@ -603,8 +603,12 @@
 
     if ( !self.playing ){
         [self updateButton:self.playButton withImageNamed:@"play.png"];
+        self.playButton.accessibilityLabel = @"Play";
+        self.playButton.accessibilityHint = @"Play the track.";
     } else {
         [self updateButton:self.playButton withImageNamed:@"pause.png"];
+        self.playButton.accessibilityLabel = @"Pause";
+        self.playButton.accessibilityHint = @"Pause the track.";
     }
 }
 
