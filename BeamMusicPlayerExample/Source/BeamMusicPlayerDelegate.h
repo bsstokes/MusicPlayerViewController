@@ -130,5 +130,7 @@
 // TODO: is this really needed? How about some logic in the view controller to check if it can go back?
 -(void)musicPlayerBackRequested:(BeamMusicPlayerViewController*)musicPlayer;
 
+-(BOOL)musicPlayer:(BeamMusicPlayerViewController *)musicPlayer previousShouldGoToBeginningOfTrack:(NSUInteger)track;
+
 @end
 

@@ -325,9 +325,27 @@
 }
 
 -(void)previous {
-    self.lastDirectionChangePositive = NO;
 
-    [self changeTrack:self->currentTrack-1];
+    if ([self.delegate respondsToSelector:@selector(musicPlayer:previousShouldGoToBeginningOfTrack:)] &&
+        [self.delegate musicPlayer:self previousShouldGoToBeginningOfTrack:self->currentTrack])
+    {
+        [self resetCurrentTrack];
+    } else {
+        self.lastDirectionChangePositive = NO;
+        [self changeTrack:self->currentTrack-1];
+    }
+}
+
+-(void)resetCurrentTrack {
+
+    self.lastDirectionChangePositive = NO;
+    self->currentPlaybackPosition = 0;
+
+    if ( [self.delegate respondsToSelector:@selector(musicPlayer:didSeekToPosition:scrubbingEnded:)]) {
+        [self.delegate musicPlayer:self didSeekToPosition:self->currentPlaybackPosition scrubbingEnded:YES];
+    }
+
+    [self updateSeekUI];
 }
 
 /*
