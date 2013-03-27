@@ -199,10 +199,19 @@
         [self.delegate respondsToSelector:@selector(musicPlayerActionRequested:)]
         ? self.actionButton
         : nil;
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self.backButton.target
+               action:self.backButton.action
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:self.backButton.image forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0, 32, 20);
+
+    UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     
     self.navigationItem.leftBarButtonItem =
         [self.delegate respondsToSelector:@selector(musicPlayerBackRequested:)]
-        ? self.backButton
+        ? buttonItem
         : nil;
 }
 
